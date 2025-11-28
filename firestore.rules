@@ -1,0 +1,51 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isLoggedIn() {
+      return request.auth != null;
+    }
+
+    function userDocPath(uid) {
+      return /databases/$(database)/documents/users/$(uid);
+    }
+
+    function requesterRole() {
+      return isLoggedIn() && exists(userDocPath(request.auth.uid))
+        ? get(userDocPath(request.auth.uid)).data.role
+        : null;
+    }
+
+    function isAdmin() {
+      return requesterRole() == 'admin';
+    }
+
+    function isStaff() {
+      return requesterRole() == 'staff' || isAdmin();
+    }
+
+    match /users/{uid} {
+      allow read: if isLoggedIn();
+      allow create: if isLoggedIn() && request.auth.uid == uid;
+      allow update: if isLoggedIn() && request.auth.uid == uid;
+      allow delete: if isLoggedIn() && request.auth.uid == uid;
+    }
+
+    match /issues/{issueId} {
+      allow read: if true;
+      allow create: if isLoggedIn() && request.resource.data.userId == request.auth.uid;
+      allow update: if isLoggedIn()
+        && request.resource.data.userId == resource.data.userId
+        && (
+          (request.auth.uid == resource.data.userId && request.resource.data.status == resource.data.status)
+          || (isStaff() && request.resource.data.status != 'Resolved')
+          || isAdmin()
+        );
+      allow delete: if isAdmin();
+    }
+
+    match /drafts/{draftId} {
+      allow create: if isLoggedIn() && request.resource.data.userId == request.auth.uid;
+      allow read, update, delete: if isLoggedIn() && resource.data.userId == request.auth.uid;
+    }
+  }
+}

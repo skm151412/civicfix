@@ -1,0 +1,30 @@
+/* eslint-disable no-undef */
+importScripts('https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging-compat.js');
+
+const firebaseConfig = {
+  apiKey: 'AIzaSyCWHlrAOsgjmHqLQSBJIOtXXaROU6biC0k',
+  authDomain: 'civicfix-821dd.firebaseapp.com',
+  projectId: 'civicfix-821dd',
+  storageBucket: 'civicfix-821dd.appspot.com',
+  messagingSenderId: '944530057420',
+  appId: '1:944530057420:web:7dc7343e17216a3308fa69',
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const messaging = firebase.messaging();
+const vapidKey = self.VITE_FIREBASE_VAPID_KEY || 'YOUR-VAPID-KEY-HERE';
+self.VITE_FIREBASE_VAPID_KEY = vapidKey;
+
+messaging.onBackgroundMessage((payload) => {
+  const notification = payload?.notification ?? {};
+  const title = notification.title || 'CivicFix update';
+  const body = notification.body || 'You have a new activity on one of your reports.';
+
+  self.registration.showNotification(title, {
+    body,
+    icon: notification.icon || '/icons/icon-192.png',
+    data: payload?.data,
+  });
+});

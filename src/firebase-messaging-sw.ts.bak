@@ -1,0 +1,27 @@
+/// <reference lib="webworker" />
+
+import { initializeApp } from 'firebase/app';
+import { getMessaging, onBackgroundMessage } from 'firebase/messaging/sw';
+
+const firebaseConfig = {
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY ?? 'AIzaSyCWHlrAOsgjmHqLQSBJIOtXXaROU6biC0k',
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN ?? 'civicfix-821dd.firebaseapp.com',
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID ?? 'civicfix-821dd',
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET ?? 'civicfix-821dd.appspot.com',
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID ?? '944530057420',
+  appId: import.meta.env.VITE_FIREBASE_APP_ID ?? '1:944530057420:web:7dc7343e17216a3308fa69',
+};
+
+const app = initializeApp(firebaseConfig);
+const messaging = getMessaging(app);
+
+onBackgroundMessage(messaging, (payload) => {
+  const notificationTitle = payload.notification?.title ?? 'CivicFix update';
+  const notificationOptions: NotificationOptions = {
+    body: payload.notification?.body ?? 'You have activity on one of your reports.',
+    icon: payload.notification?.icon ?? '/icons/icon-192.png',
+    data: payload.data,
+  };
+
+  self.registration.showNotification(notificationTitle, notificationOptions);
+});

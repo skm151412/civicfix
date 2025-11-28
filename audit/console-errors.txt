@@ -1,0 +1,13 @@
+Console log capture — 2025-11-26 13:16 UTC
+Target URL: http://127.0.0.1:4173 (dev server via Start-Job)
+Collection method: Playwright headless Chromium (`npm run console:audit`, script in scripts/capture-console.mjs)
+
+Observed errors:
+- None captured during initial load and 5 s idle wait.
+  Remediation: Re-run capture after hooking real Firebase data + phone auth, and keep Playwright script in CI to detect regressions.
+
+Instrumented reporter:
+- Added `utils/errorReporter.ts` and invoked it from `index.tsx` so `window.onerror` and `unhandledrejection` events persist in `sessionStorage` and echo to console for post-deploy diagnostics.
+
+Step 14 spot-check (2025-11-26 20:04 local):
+- `npm run build` + `npx playwright test` produced no additional browser console errors (tests skipped awaiting credentials). Next action: rerun console capture once staging deploy is live to validate telemetry + analytics boot without warnings.

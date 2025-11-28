@@ -1,0 +1,40 @@
+{
+  "name": "civicfix",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "console:audit": "node scripts/capture-console.mjs",
+    "preview": "vite preview",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@sentry/browser": "^8.32.0",
+    "firebase": "^12.6.0",
+    "framer-motion": "^12.23.24",
+    "leaflet": "^1.9.4",
+    "leaflet.heat": "^0.2.0",
+    "lucide-react": "^0.554.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-is": "^19.2.0",
+    "react-leaflet": "^5.0.0",
+    "react-leaflet-cluster": "^4.0.0",
+    "react-router-dom": "^7.9.6",
+    "recharts": "^3.4.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.48.2",
+    "@types/node": "^22.14.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "autoprefixer": "^10.4.22",
+    "firebase-tools": "^14.26.0",
+    "playwright": "^1.57.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.14",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.0"
+  }
+}

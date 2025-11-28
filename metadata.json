@@ -1,0 +1,8 @@
+{
+  "name": "CivicFix",
+  "description": "A modern public issue reporting system allowing citizens to report, track, and resolve civic issues.",
+  "requestFramePermissions": [
+    "geolocation",
+    "camera"
+  ]
+}
